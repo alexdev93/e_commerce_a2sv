@@ -1,58 +1,86 @@
 import bcrypt from "bcryptjs";
-import { CreateUserInput, LoginInput } from "../validators/userValidator";
+import jwt from "jsonwebtoken";
+import { CreateUserInput, LoginInput } from "../validators/user.validator";
 import { ApiResponse } from "../model/ApiResponse";
-import { User } from "../model/user.model";
+import { User } from "../entities/user.entity";
+import { AppDataSource } from "../config/data-source";
+
+const userRepo = AppDataSource.getMongoRepository(User);
+const JWT_SECRET = process.env.JWT_SECRET || "your_default_secret";
 
 export class UserService {
-
+  /**
+   * Login user
+   */
   static async loginUser(data: LoginInput, response: ApiResponse): Promise<void> {
-    // const user = await User.findOne({ email });
-    // if (user && (await bcrypt.compare(password, user.password!))) {
-    //   // return user;
-    // }
-  }
+    const { email, password } = data;
 
+    const user = await userRepo.findOne({ where: { email } });
+    if (!user) {
+      response.success = false;
+      response.message = "Invalid Email";
+      response.object = null;
+      return;
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      response.success = false;
+      response.message = "Invalid Password";
+      response.object = null;
+      return;
+    }
+
+    const token = jwt.sign(
+      {
+        id: user.id,
+        role: user.role,
+      },
+      JWT_SECRET,
+      { expiresIn: "8h" }
+    );
+
+    response.success = true;
+    response.message = "Login successful";
+    response.object = {
+      token
+    };
+  }
 
   /**
    * Register a new user
-   * @param data User input
-   * @param response ApiResponse object passed by reference
    */
-  static async registerUser(
-    data: CreateUserInput,
-    response: ApiResponse
-  ): Promise<void> {
-    const { name, email, password } = data;
+  static async registerUser(data: CreateUserInput, response: ApiResponse): Promise<void> {
+    const { username, email, password } = data;
 
-    // Check if email or username already exists
-    const existingUser = await User.findOne({ $or: [{ email }, { name }] });
+    // Check if user exists (email or name)
+    const existingUser = await userRepo.findOne({ where: { email } });
+
     if (existingUser) {
       response.success = false;
       response.message = "Email or username already exists";
       response.object = null;
-      response.errors = null;
       return;
     }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Create user
-    const user = new User({
-      name,
+    const newUser = userRepo.create({
+      username,
       email,
       password: hashedPassword,
+      role: "USER",
     });
-      await user.save();
-      
+
+    await userRepo.save(newUser);
+
     response.success = true;
     response.message = "User registered successfully";
     response.object = {
-      id: user._id,
-      name: user.name,
-      email: user.email,
+      id: newUser.id,
+      username: newUser.username,
+      email: newUser.email,
     };
-    response.errors = null;
   }
-
 }

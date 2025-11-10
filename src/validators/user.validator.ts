@@ -29,7 +29,7 @@ const usernameSchema = z
 
 // ✅ User creation schema
 export const createUserSchema = z.object({
-  name: usernameSchema,
+  username: usernameSchema,
   email: z.string().email("Invalid email format."),
   password: passwordSchema,
 });
