@@ -10,8 +10,10 @@ import { ApiResponse } from "../model/ApiResponse";
 import { ProductService } from "../services/product.service";
 import { authorizeRoles, verifyJwt } from "../middleware/authHandler";
 import { PaginatedResponse } from "../model/PaginatedResponse";
+import multer from "multer";
 
 const productRoutes = express.Router();
+const upload = multer({ dest: "uploads/" });
 
 /**
  * @route POST /products
@@ -21,6 +23,7 @@ productRoutes.post(
     "/",
     verifyJwt,
     authorizeRoles(["ADMIN"]),
+    upload.single("image"),
     catchAsync(async (req, res) => {
         const apiResponse = new ApiResponse({ message: "" });
 
@@ -33,6 +36,8 @@ productRoutes.post(
             return;
         }
 
+        const imageFile = req.file;
+
         const adminId = req.user?.userId;
         if (!adminId) {
             apiResponse.success = false;
@@ -42,7 +47,7 @@ productRoutes.post(
             return;
         }
 
-        const result = await ProductService.createProduct(adminId, parseResult.data);
+        const result = await ProductService.createProduct(adminId, parseResult.data, imageFile);
 
         res.status(result.success ? 201 : 400).json(result);
     })

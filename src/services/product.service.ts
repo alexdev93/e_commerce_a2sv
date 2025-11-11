@@ -4,6 +4,7 @@ import { User } from "../entities/user.entity";
 import { ApiResponse } from "../model/ApiResponse";
 import { CreateProductInput, UpdateProductInput, GetProductsInput } from "../validators/product.validator";
 import { PaginatedResponse } from "../model/PaginatedResponse";
+import cloudinary from "../config/cloudinary.config";
 
 const productRepo = AppDataSource.getRepository(Product);
 const userRepo = AppDataSource.getRepository(User);
@@ -12,8 +13,26 @@ export class ProductService {
     /**
      * Create a new product (Admin only)
      */
-    static async createProduct(adminId: string, data: CreateProductInput): Promise<ApiResponse> {
+    static async createProduct(adminId: string, data: CreateProductInput, imageFile: any): Promise<ApiResponse> {
         const apiResponse = new ApiResponse({ message: "" });
+
+        let imageUrl: string | undefined;
+
+        if (imageFile) {
+            console.log("🖼️ Image file found:", imageFile.originalname);
+
+            try {
+                const uploadResult = await cloudinary.uploader.upload(imageFile.path, {
+                    folder: "ecommerce_products",
+                });
+                imageUrl = uploadResult.secure_url;
+                console.log("✅ Uploaded to Cloudinary:", imageUrl);
+            } catch (err) {
+                console.error("❌ Cloudinary upload failed:", err);
+            }
+        } else {
+            console.log("⚠️ No image file uploaded. Proceeding without image.");
+        }
 
         try {
             const admin = await userRepo.findOne({ where: { id: adminId } });
@@ -22,6 +41,7 @@ export class ProductService {
             const product = productRepo.create({
                 ...data,
                 user: admin,
+                image: imageUrl,
             });
 
             await productRepo.save(product);

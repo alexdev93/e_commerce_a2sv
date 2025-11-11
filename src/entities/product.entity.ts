@@ -31,6 +31,9 @@ export class Product {
     @ManyToOne(() => User, (user) => user.products)
     user!: User;
 
+    @Column({ nullable: true })
+    image!: string;
+
     @CreateDateColumn()
     createdAt!: Date;
 

@@ -22,7 +22,7 @@ export const AppDataSource = new DataSource({
   username: DB_USERNAME,
   password: DB_PASSWORD,
   database: DB_NAME,
-  synchronize: Boolean(DB_SYNC) || false,
-  logging: false,
+  synchronize: true,
+  logging: true,
   entities: [User, Product, Order],
 });
