@@ -8,20 +8,60 @@ services:
       POSTGRES_PASSWORD: admin123
       POSTGRES_DB: a2sv_db
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - a2sv-net
-  
+
   redis-stack:
     image: redis/redis-stack-server:latest
     container_name: redis-stack-server
     ports:
       - "6379:6379"
     volumes:
-      - redis_data:/data 
+      - redis_data:/data
     restart: always
+    networks:
+      - a2sv-net
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: a2sv_backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: production
+
+      # Database
+      DB_HOST: postgres-a2sv
+      DB_PORT: 5432
+      DB_USERNAME: admin
+      DB_PASSWORD: admin123
+      DB_DATABASE: a2sv_db
+      DATABASE_URL: postgres://admin:admin123@postgres-a2sv:5432/a2sv_db
+
+      # JWT
+      JWT_SECRET: replace_with_a_strong_secret
+      JWT_EXPIRES_IN: 1d
+
+      # Bcrypt
+      BCRYPT_SALT_ROUNDS: 10
+
+      # Redis
+      REDIS_HOST: redis-stack
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ""
+      REDIS_DB: 0
+      REDIS_TTL: 3600
+    depends_on:
+      - postgres-a2sv
+      - redis-stack
+    networks:
+      - a2sv-net
 
 networks:
   a2sv-net:
