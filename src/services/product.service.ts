@@ -5,6 +5,7 @@ import { User } from "../entities/user.entity";
 import { ApiResponse } from "../model/ApiResponse";
 import { CreateProductInput, UpdateProductInput, GetProductsInput } from "../validators/product.validator";
 import { PaginatedResponse } from "../model/PaginatedResponse";
+import { AppError } from "../utils/AppError";
 
 const productRepo = AppDataSource.getMongoRepository(Product);
 // const userRepo = AppDataSource.getMongoRepository(User);
@@ -144,6 +145,44 @@ export class ProductService {
             apiResponse.success = false;
             apiResponse.message = "Failed to retrieve products";
             apiResponse.errors = [errorMessage];
+            return apiResponse;
+        }
+    }
+
+    /**
+  * Get product details by ID (public)
+  */
+    static async getProductById(productId: string): Promise<ApiResponse> {
+        const apiResponse = new ApiResponse({ message: "" });
+
+        try {
+            // Validate ObjectId
+            if (!ObjectId.isValid(productId)) {
+                apiResponse.success = false;
+                apiResponse.message = "Invalid product ID format";
+                apiResponse.errors = ["The provided ID is not a valid ObjectId"];
+                return apiResponse;
+            }
+
+            // Find product by ID
+            const product = await productRepo.findOneBy({ _id: new ObjectId(productId) });
+
+            if (!product) {
+                apiResponse.success = false;
+                apiResponse.message = "Product not found";
+                apiResponse.errors = [`No product found with ID ${productId}`];
+                return apiResponse;
+            }
+
+            // Success response
+            apiResponse.success = true;
+            apiResponse.message = "Product retrieved successfully";
+            apiResponse.object = product;
+            return apiResponse;
+        } catch (error) {
+            apiResponse.success = false;
+            apiResponse.message = "Failed to retrieve product";
+            apiResponse.errors = [error.message];
             return apiResponse;
         }
     }

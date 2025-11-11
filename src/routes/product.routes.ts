@@ -1,6 +1,11 @@
 import express from "express";
 import { catchAsync } from "../utils/catchAsync";
-import { createProductSchema, GetProductsInput, getProductsQuerySchema, updateProductSchema } from "../validators/product.validator";
+import {
+    createProductSchema,
+    GetProductsInput,
+    getProductsQuerySchema,
+    updateProductSchema,
+} from "../validators/product.validator";
 import { ApiResponse } from "../model/ApiResponse";
 import { ProductService } from "../services/product.service";
 import { authorizeRoles, verifyJwt } from "../middleware/authHandler";
@@ -40,7 +45,10 @@ productRoutes.post(
             return;
         }
 
-        const result = await ProductService.createProduct(adminId, parseResult.data);
+        const result = await ProductService.createProduct(
+            adminId,
+            parseResult.data
+        );
 
         apiResponse.success = result.success;
         apiResponse.message = result.message;
@@ -84,14 +92,25 @@ productRoutes.put(
         }
 
         const productId: ObjectId | string = req.params.id;
-        const result = await ProductService.updateProduct(productId, parseResult.data);
+        const result = await ProductService.updateProduct(
+            productId,
+            parseResult.data
+        );
 
         apiResponse.success = result.success;
         apiResponse.message = result.message;
         apiResponse.object = result.object;
         apiResponse.errors = result.errors;
 
-        res.status(result.success ? 200 : result.message === "Product not found" ? 404 : 400).json(apiResponse);
+        res
+            .status(
+                result.success
+                    ? 200
+                    : result.message === "Product not found"
+                        ? 404
+                        : 400
+            )
+            .json(apiResponse);
     })
 );
 
@@ -119,8 +138,27 @@ productRoutes.get(
         // Fetch products with pagination
         const result = await ProductService.getProducts({ page, pageSize, search });
 
-
         res.status(result.success ? 200 : 400).json(result);
+    })
+);
+
+/**
+ * GET /products/:id
+ * Get detailed information of a single product by ID (public)
+ */
+productRoutes.get(
+    "/:id",
+    catchAsync(async (req, res): Promise<void> => {
+        const { id } = req.params;
+        const result = await ProductService.getProductById(id);
+
+        if (!result.success) {
+            res.status(result.errors ? 404 : 400).json(result);
+            return
+        }
+
+        res.status(200).json(result);
+        return;
     })
 );
 
