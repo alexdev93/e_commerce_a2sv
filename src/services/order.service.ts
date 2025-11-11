@@ -92,4 +92,37 @@ export class OrderService {
             return apiResponse;
         }
     }
+
+    /**
+   * Get all orders for a specific user
+   * @param userId - ID of the authenticated user as string
+   */
+    static async getUserOrders(userId: string): Promise<ApiResponse> {
+        try {
+            const orderRepo = AppDataSource.getMongoRepository(Order);
+
+            // Convert string userId to MongoDB ObjectId
+            const userObjectId = new ObjectId(userId);
+
+            const orders = await orderRepo.find({
+                where: { userId: userObjectId },
+                order: { createdAt: "DESC" },
+                select: ["id", "status", "totalPrice", "createdAt"]
+            });
+
+            return {
+                success: true,
+                message: "User orders retrieved successfully",
+                object: orders,
+                errors: null
+            };
+        } catch (error: any) {
+            return {
+                success: false,
+                message: "Failed to retrieve user orders",
+                object: null,
+                errors: [error.message]
+            };
+        }
+    }
 }

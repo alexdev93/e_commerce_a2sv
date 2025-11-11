@@ -49,4 +49,22 @@ orderRoutes.post(
     })
 );
 
-export default orderRoutes ;
+/**
+ * GET /orders
+ * Get all orders for the logged-in user
+ * Protected route: requires JWT
+ */
+orderRoutes.get(
+    "/",
+    verifyJwt,
+    catchAsync(async (req, res): Promise<void> => {
+        const userId = req.user?.userId; // assuming verifyJwt sets req.user
+
+        const response = await OrderService.getUserOrders(userId ?? "");
+
+        res.status(response.success ? 200 : 500).json(response);
+        return;
+    })
+);
+
+export default orderRoutes;
