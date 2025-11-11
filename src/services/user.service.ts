@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { CreateUserInput, LoginInput } from "../validators/user.validator";
-import { ApiResponse } from "../model/ApiResponse";
+import { ApiResponse } from "../dto/ApiResponse";
 import { User } from "../entities/user.entity";
 import { AppDataSource } from "../config/data-source";
 

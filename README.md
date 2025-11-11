@@ -23,9 +23,7 @@ This is the backend for an e-commerce platform, implementing core functionalitie
 - **bcrypt** for password hashing
 - Optional: **Cloudinary** or similar for file uploads (if implemented)
 
-> If you used any caching or testing frameworks (e.g., Jest, Redis), mention them here.
 
----
 
 ## Getting Started
 
