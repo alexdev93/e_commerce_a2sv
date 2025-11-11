@@ -162,4 +162,33 @@ productRoutes.get(
     })
 );
 
+/**
+ * @route DELETE /products/:id
+ * @desc Delete a product (Admin only)
+ */
+productRoutes.delete(
+    "/:id",
+    verifyJwt,
+    authorizeRoles(["ADMIN"]),
+    catchAsync(async (req, res): Promise<void> => {
+        const apiResponse = new ApiResponse({ message: "" });
+
+        const adminId = req.user?.userId;
+        if (!adminId) {
+            apiResponse.success = false;
+            apiResponse.message = "Unauthorized";
+            apiResponse.errors = ["Missing admin ID from token"];
+            res.status(401).json(apiResponse);
+            return;
+        }
+
+        const productId: ObjectId | string = req.params.id;
+        const result = await ProductService.deleteProduct(productId);
+
+        res
+            .status(result.success ? 200 : result.message === "Product not found" ? 404 : 400)
+            .json(result);
+    })
+);
+
 export default productRoutes;

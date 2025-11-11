@@ -186,4 +186,34 @@ export class ProductService {
             return apiResponse;
         }
     }
+
+    /**
+    * Delete a product (Admin only)
+    */
+    static async deleteProduct(productId: string | ObjectId): Promise<ApiResponse> {
+        const apiResponse = new ApiResponse({ message: "" });
+
+        try {
+            const product = await productRepo.findOneBy({ _id: new ObjectId(productId) });
+            if (!product) {
+                apiResponse.success = false;
+                apiResponse.message = "Product not found";
+                apiResponse.errors = [`No product found with ID ${productId}`];
+                return apiResponse;
+            }
+
+            await productRepo.delete({ id: new ObjectId(productId) });
+
+            apiResponse.success = true;
+            apiResponse.message = "Product deleted successfully";
+            apiResponse.object = null;
+            return apiResponse;
+        } catch (err) {
+            const errorMessage = err instanceof Error ? err.message : String(err);
+            apiResponse.success = false;
+            apiResponse.message = "Failed to delete product";
+            apiResponse.errors = [errorMessage];
+            return apiResponse;
+        }
+    }
 }
