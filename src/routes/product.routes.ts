@@ -1,10 +1,11 @@
 import express from "express";
 import { catchAsync } from "../utils/catchAsync";
-import { createProductSchema, updateProductSchema } from "../validators/product.validator";
+import { createProductSchema, getProductsQuerySchema, updateProductSchema } from "../validators/product.validator";
 import { ApiResponse } from "../model/ApiResponse";
 import { ProductService } from "../services/product.service";
 import { authorizeRoles, verifyJwt } from "../middleware/authHandler";
 import { ObjectId } from "mongodb";
+import { PaginatedResponse } from "../model/PaginatedResponse";
 
 const productRoutes = express.Router();
 
@@ -94,5 +95,33 @@ productRoutes.put(
     })
 );
 
+/**
+ * @route GET /products
+ * @desc Get a paginated list of products (public)
+ */
+productRoutes.get(
+    "/",
+    catchAsync(async (req, res): Promise<void> => {
+        const apiResponse = new PaginatedResponse({ message: "" });
+
+        // Validate query parameters
+        const parseResult = getProductsQuerySchema.safeParse(req.query);
+        if (!parseResult.success) {
+            apiResponse.success = false;
+            apiResponse.message = "Invalid query parameters";
+            apiResponse.errors = parseResult.error.issues.map((err) => err.message);
+            res.status(400).json(apiResponse);
+            return;
+        }
+
+        const { page, pageSize } = parseResult.data;
+
+        // Fetch products with pagination
+        const result = await ProductService.getProducts({ page, pageSize });
+
+
+        res.status(result.success ? 200 : 400).json(result);
+    })
+);
 
 export default productRoutes;

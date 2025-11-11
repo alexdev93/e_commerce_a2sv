@@ -4,9 +4,14 @@ import { Product } from "../entities/product.entity";
 import { User } from "../entities/user.entity";
 import { ApiResponse } from "../model/ApiResponse";
 import { CreateProductInput, UpdateProductInput } from "../validators/product.validator";
+import { PaginatedResponse } from "../model/PaginatedResponse";
 
 const productRepo = AppDataSource.getMongoRepository(Product);
-const userRepo = AppDataSource.getMongoRepository(User);
+// const userRepo = AppDataSource.getMongoRepository(User);
+interface GetProductsInput {
+    page: number;
+    pageSize: number;
+}
 
 export class ProductService {
     /**
@@ -82,6 +87,57 @@ export class ProductService {
 
             apiResponse.success = false;
             apiResponse.message = "Internal server error";
+            apiResponse.errors = [errorMessage];
+            return apiResponse;
+        }
+    }
+
+    /**
+   * Get paginated list of products (public)
+   */
+    static async getProducts({ page, pageSize }: GetProductsInput): Promise<ApiResponse> {
+        const apiResponse = new PaginatedResponse({ message: "" });
+
+        try {
+            // 1️⃣ Count total products
+            const totalProducts = await productRepo.count();
+
+            // 2️⃣ Calculate total pages
+            const totalPages = Math.ceil(totalProducts / pageSize);
+
+            // 3️⃣ Fetch products with pagination
+            const products = await productRepo.find({
+                skip: (page - 1) * pageSize,
+                take: pageSize,
+                order: { name: "ASC" },
+            });
+
+            // 4️⃣ Map products to essential info
+            const productList = products.map((p) => ({
+                id: p.id,
+                name: p.name,
+                price: p.price,
+                stock: p.stock,
+                category: p.category,
+            }));
+
+            // 5️⃣ Return success response
+            apiResponse.success = true;
+            apiResponse.message = "Products retrieved successfully";
+            apiResponse.pageNumber = page;
+            apiResponse.pageSize = pageSize;
+            apiResponse.totalSize = totalProducts;
+            apiResponse.object = {
+                products: productList,
+            };
+
+            return apiResponse;
+        } catch (err) {
+            console.error("Error fetching products:", err);
+            const errorMessage = err instanceof Error ? err.message : String(err);
+
+            apiResponse.success = false;
+            apiResponse.message = "Failed to retrieve products";
             apiResponse.errors = [errorMessage];
             return apiResponse;
         }

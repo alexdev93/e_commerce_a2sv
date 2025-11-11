@@ -1,4 +1,4 @@
-import { ApiResponse } from "./ApiResponse.js";
+import { ApiResponse } from "./ApiResponse";
 
 export class PaginatedResponse extends ApiResponse {
   pageNumber: number;
@@ -14,7 +14,7 @@ export class PaginatedResponse extends ApiResponse {
     totalSize = 0,
     errors = null,
   }: {
-    success: boolean;
+      success?: boolean;
     message: string;
     object?: Object[];
     pageNumber?: number;
