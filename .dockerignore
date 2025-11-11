@@ -1,0 +1,19 @@
+# Node modules
+node_modules
+# Logs
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+# TypeScript output
+dist
+# Environment variables
+.env
+# OS files
+.DS_Store
+# Git
+.git
+.gitignore
+# Tests
+tests
+*.test.ts
+*.spec.ts
