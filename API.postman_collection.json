@@ -1,0 +1,1066 @@
+{
+	"info": {
+		"_postman_id": "b8ecab93-24bd-474d-9d8c-756e4f2113d9",
+		"name": "a2sv",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30639767"
+	},
+	"item": [
+		{
+			"name": "Signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"alex\",\r\n    \"email\": \"alex@gamil.com\",\r\n    \"password\": \"User@123!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Benji\",\r\n    \"email\": \"benji.lab@gamil.com\",\r\n    \"password\": \"Admin@123!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/api/auth/register",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "159"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"9f-4ItuxyRsmFMxNxAByW6m6e498PU\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 10 Nov 2025 17:55:09 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"message\": \"User registered successfully\",\n    \"object\": {\n        \"id\": \"691226fd8b108883e3c4084e\",\n        \"name\": \"Benji\",\n        \"email\": \"benji.lab@gamil.com\"\n    },\n    \"errors\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Signin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"user@gamil.com\",\r\n    \"password\": \"User@123!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"miki@gamil.com\",\r\n    \"password\": \"Admin@123!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/api/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "270"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"10e-klyPwrUN/E8OctLxUYW0Kg+kW6k\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 10 Nov 2025 18:43:30 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"message\": \"Login successful\",\n    \"object\": {\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MTIzMjQzZjE5ODQ3YjI1N2Q1MDk2NSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzYyODAwMjEwLCJleHAiOjE3NjI4MjkwMTB9.0NHG_aEXIqxATS17VhiA_VauLzPPowRPKxPT_-Hl5d8\"\n    },\n    \"errors\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Create Products",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MDUwMTkxMC03YWZjLTRmNWYtODdjMi05MzQ0OTBiMzZiNGYiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzYyODg0MjAyLCJleHAiOjE3NjI5MTMwMDJ9.D9htho4t_auvqZOe7Q1kXaf0ovddpwJuE56E8PV8jzc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Wireless Mouse\",\r\n  \"description\": \"Ergonomic wireless mouse with adjustable DPI\",\r\n  \"price\": 25.99,\r\n  \"stock\": 100,\r\n  \"category\": \"Electronics\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/products",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"products"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Product A\",\r\n  \"description\": \"Some description  sfds sfg\",\r\n  \"price\": 25.5,\r\n  \"stock\": 10,\r\n  \"category\": \"shoes\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/products",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "587"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"24b-1KcRexN9N7I+B7bsrbmZmLjC5rQ\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Nov 2025 18:08:05 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"message\": \"Product created successfully\",\n    \"object\": {\n        \"name\": \"Product A\",\n        \"description\": \"Some description  sfds sfg\",\n        \"price\": 25.5,\n        \"stock\": 10,\n        \"category\": \"shoes\",\n        \"user\": {\n            \"id\": \"60501910-7afc-4f5f-87c2-934490b36b4f\",\n            \"username\": \"admin\",\n            \"email\": \"admin@gamil.com\",\n            \"password\": \"$2b$12$tsec7gBE74xmgn9WjodxReWs47kXzIwFTYrgvp16u2DuW.96ToRmW\",\n            \"role\": \"ADMIN\",\n            \"createdAt\": \"2025-11-11T17:42:53.977Z\",\n            \"updatedAt\": \"2025-11-11T17:42:53.977Z\"\n        },\n        \"image\": null,\n        \"id\": \"f3c71cf7-4710-4f6d-a746-279725cd8a9c\",\n        \"createdAt\": \"2025-11-11T18:08:05.219Z\",\n        \"updatedAt\": \"2025-11-11T18:08:05.219Z\"\n    },\n    \"errors\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Update Products",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MDUwMTkxMC03YWZjLTRmNWYtODdjMi05MzQ0OTBiMzZiNGYiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzYyODg0MjAyLCJleHAiOjE3NjI5MTMwMDJ9.D9htho4t_auvqZOe7Q1kXaf0ovddpwJuE56E8PV8jzc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Wireless Gaming Mouse\",\r\n  \"description\": \"Ergonomic wireless gaming mouse with RGB lights\",\r\n  \"price\": 29.99,\r\n  \"stock\": 80,\r\n  \"category\": \"Electronics\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/products/0d01bb98-db9b-407a-b0ae-5c97f4515267",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"products",
+						"0d01bb98-db9b-407a-b0ae-5c97f4515267"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Wireless Gaming Mouse\",\r\n  \"description\": \"Ergonomic wireless gaming mouse with RGB lights\",\r\n  \"price\": 29.99,\r\n  \"stock\": 80,\r\n  \"category\": \"Electronics\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/products/0d01bb98-db9b-407a-b0ae-5c97f4515267",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"products",
+								"0d01bb98-db9b-407a-b0ae-5c97f4515267"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "362"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"16a-TiI2wxjKocsqhKZYtknXmUCxvpA\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Nov 2025 18:10:38 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"message\": \"Product updated successfully\",\n    \"object\": {\n        \"id\": \"0d01bb98-db9b-407a-b0ae-5c97f4515267\",\n        \"name\": \"Wireless Gaming Mouse\",\n        \"description\": \"Ergonomic wireless gaming mouse with RGB lights\",\n        \"price\": 29.99,\n        \"stock\": 80,\n        \"category\": \"Electronics\",\n        \"image\": null,\n        \"createdAt\": \"2025-11-11T18:07:30.985Z\",\n        \"updatedAt\": \"2025-11-11T18:10:38.838Z\"\n    },\n    \"errors\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "List Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/products?page=1&pageSize=10",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"products"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "pageSize",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "List Products",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/products?page=1&pageSize=10",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "503"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1f7-61WC5F3NpP6AwQbzycrFLa0PyYg\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Nov 2025 18:11:24 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"object\": {\n        \"products\": [\n            {\n                \"id\": \"f3c71cf7-4710-4f6d-a746-279725cd8a9c\",\n                \"name\": \"Product A\",\n                \"price\": \"25.5\",\n                \"stock\": 10,\n                \"category\": \"shoes\"\n            },\n            {\n                \"id\": \"0d01bb98-db9b-407a-b0ae-5c97f4515267\",\n                \"name\": \"Wireless Gaming Mouse\",\n                \"price\": \"29.99\",\n                \"stock\": 80,\n                \"category\": \"Electronics\"\n            },\n            {\n                \"id\": \"263ef4f4-d577-40bd-8e30-5d167a4314f3\",\n                \"name\": \"Wireless Mouse\",\n                \"price\": \"25.99\",\n                \"stock\": 100,\n                \"category\": \"Electronics\"\n            }\n        ]\n    },\n    \"errors\": null,\n    \"pageNumber\": 1,\n    \"pageSize\": 10,\n    \"totalSize\": 3\n}"
+				},
+				{
+					"name": "List Products From Cache",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/products?page=1&pageSize=10",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "671"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"29f-owaXikqc2DKBEZkggeEN7eNfiS4\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Nov 2025 18:59:38 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully (from cache)\",\n    \"object\": {\n        \"products\": [\n            {\n                \"id\": \"f3c71cf7-4710-4f6d-a746-279725cd8a9c\",\n                \"name\": \"Product A\",\n                \"description\": \"Some description  sfds sfg\",\n                \"price\": \"25.5\",\n                \"stock\": 9,\n                \"category\": \"shoes\",\n                \"image\": null,\n                \"createdAt\": \"2025-11-11T18:08:05.219Z\",\n                \"updatedAt\": \"2025-11-11T18:18:52.265Z\"\n            },\n            {\n                \"id\": \"263ef4f4-d577-40bd-8e30-5d167a4314f3\",\n                \"name\": \"Wireless Mouse\",\n                \"description\": \"Ergonomic wireless mouse with adjustable DPI\",\n                \"price\": \"25.99\",\n                \"stock\": 98,\n                \"category\": \"Electronics\",\n                \"image\": null,\n                \"createdAt\": \"2025-11-11T18:09:00.243Z\",\n                \"updatedAt\": \"2025-11-11T18:18:52.265Z\"\n            }\n        ]\n    },\n    \"errors\": null,\n    \"pageNumber\": 1,\n    \"pageSize\": 10,\n    \"totalSize\": 2\n}"
+				}
+			]
+		},
+		{
+			"name": "Search Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/products?search=Wireless Mouse&page=1&pageSize=10",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"products"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "Wireless Mouse"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "pageSize",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/products?search=Wireless Mouse&page=1&pageSize=10",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "Wireless Mouse"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "264"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"108-KqXsj5jyoIBx06IL5V4QBwMdYLY\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Nov 2025 18:12:30 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"object\": {\n        \"products\": [\n            {\n                \"id\": \"263ef4f4-d577-40bd-8e30-5d167a4314f3\",\n                \"name\": \"Wireless Mouse\",\n                \"price\": \"25.99\",\n                \"stock\": 100,\n                \"category\": \"Electronics\"\n            }\n        ]\n    },\n    \"errors\": null,\n    \"pageNumber\": 1,\n    \"pageSize\": 10,\n    \"totalSize\": 1\n}"
+				}
+			]
+		},
+		{
+			"name": "Product Details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/products/0d01bb98-db9b-407a-b0ae-5c97f4515267",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"products",
+						"0d01bb98-db9b-407a-b0ae-5c97f4515267"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/products/0d01bb98-db9b-407a-b0ae-5c97f4515267",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"products",
+								"0d01bb98-db9b-407a-b0ae-5c97f4515267"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "366"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"16e-bkhho6akTseAOdTbsgqYpqg0isc\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Nov 2025 18:13:26 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"message\": \"Product retrieved successfully\",\n    \"object\": {\n        \"id\": \"0d01bb98-db9b-407a-b0ae-5c97f4515267\",\n        \"name\": \"Wireless Gaming Mouse\",\n        \"description\": \"Ergonomic wireless gaming mouse with RGB lights\",\n        \"price\": \"29.99\",\n        \"stock\": 80,\n        \"category\": \"Electronics\",\n        \"image\": null,\n        \"createdAt\": \"2025-11-11T18:07:30.985Z\",\n        \"updatedAt\": \"2025-11-11T18:10:38.838Z\"\n    },\n    \"errors\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Delete Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MDUwMTkxMC03YWZjLTRmNWYtODdjMi05MzQ0OTBiMzZiNGYiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzYyODg0MjAyLCJleHAiOjE3NjI5MTMwMDJ9.D9htho4t_auvqZOe7Q1kXaf0ovddpwJuE56E8PV8jzc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/products/0d01bb98-db9b-407a-b0ae-5c97f4515267",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"products",
+						"0d01bb98-db9b-407a-b0ae-5c97f4515267"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/api/products/0d01bb98-db9b-407a-b0ae-5c97f4515267",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"products",
+								"0d01bb98-db9b-407a-b0ae-5c97f4515267"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "85"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"55-b5ECpFj1k4w1RKzFJNt2xdSrg2U\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Nov 2025 18:14:22 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"message\": \"Product deleted successfully\",\n    \"object\": null,\n    \"errors\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Order Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwODhlOGMxZi00ZDljLTQ3ZjMtODA3Yi0wMjdiZWY5N2JhMjkiLCJ1c2VybmFtZSI6InVzZXIiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2Mjg4NTExNywiZXhwIjoxNzYyOTEzOTE3fQ.gdWp_gWYmD2pyh2rsdl770pHjEBsCirs1OP64vK11Js",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  { \"productId\": \"263ef4f4-d577-40bd-8e30-5d167a4314f3\", \"quantity\": 2 },\r\n  { \"productId\": \"f3c71cf7-4710-4f6d-a746-279725cd8a9c\", \"quantity\": 1 }\r\n]\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/orders",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"orders"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  { \"productId\": \"263ef4f4-d577-40bd-8e30-5d167a4314f3\", \"quantity\": 2 },\r\n  { \"productId\": \"f3c71cf7-4710-4f6d-a746-279725cd8a9c\", \"quantity\": 1 }\r\n]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/orders",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"orders"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1078"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"436-91IHuXctVnd1Ai+lLXtXZhgDyuo\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Nov 2025 18:18:52 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"message\": \"Order placed successfully\",\n    \"object\": {\n        \"description\": \"Order with 2 items\",\n        \"totalPrice\": 77.47999999999999,\n        \"status\": \"pending\",\n        \"user\": {\n            \"id\": \"088e8c1f-4d9c-47f3-807b-027bef97ba29\",\n            \"username\": \"user\",\n            \"email\": \"user@gamil.com\",\n            \"password\": \"$2b$12$HJfVqSY6q/Fxqf/mRnepG.T9Egg9gZdZGlVFS9KGnXBtyPx8b9KkW\",\n            \"role\": \"USER\",\n            \"createdAt\": \"2025-11-11T18:16:59.018Z\",\n            \"updatedAt\": \"2025-11-11T18:16:59.018Z\"\n        },\n        \"products\": [\n            {\n                \"id\": \"263ef4f4-d577-40bd-8e30-5d167a4314f3\",\n                \"name\": \"Wireless Mouse\",\n                \"description\": \"Ergonomic wireless mouse with adjustable DPI\",\n                \"price\": \"25.99\",\n                \"stock\": 98,\n                \"category\": \"Electronics\",\n                \"image\": null,\n                \"createdAt\": \"2025-11-11T18:09:00.243Z\",\n                \"updatedAt\": \"2025-11-11T18:18:52.265Z\"\n            },\n            {\n                \"id\": \"f3c71cf7-4710-4f6d-a746-279725cd8a9c\",\n                \"name\": \"Product A\",\n                \"description\": \"Some description  sfds sfg\",\n                \"price\": \"25.5\",\n                \"stock\": 9,\n                \"category\": \"shoes\",\n                \"image\": null,\n                \"createdAt\": \"2025-11-11T18:08:05.219Z\",\n                \"updatedAt\": \"2025-11-11T18:18:52.265Z\"\n            }\n        ],\n        \"id\": \"7ab080db-be57-46fc-9a89-9afbeb4efcc1\",\n        \"createdAt\": \"2025-11-11T18:18:52.265Z\",\n        \"updatedAt\": \"2025-11-11T18:18:52.265Z\"\n    },\n    \"errors\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Order History",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwODhlOGMxZi00ZDljLTQ3ZjMtODA3Yi0wMjdiZWY5N2JhMjkiLCJ1c2VybmFtZSI6InVzZXIiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2Mjg4NTExNywiZXhwIjoxNzYyOTEzOTE3fQ.gdWp_gWYmD2pyh2rsdl770pHjEBsCirs1OP64vK11Js",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  { \"productId\": \"263ef4f4-d577-40bd-8e30-5d167a4314f3\", \"quantity\": 2 },\r\n  { \"productId\": \"f3c71cf7-4710-4f6d-a746-279725cd8a9c\", \"quantity\": 1 }\r\n]\r\n"
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/orders",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"orders"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  { \"productId\": \"263ef4f4-d577-40bd-8e30-5d167a4314f3\", \"quantity\": 2 },\r\n  { \"productId\": \"f3c71cf7-4710-4f6d-a746-279725cd8a9c\", \"quantity\": 1 }\r\n]\r\n"
+						},
+						"url": {
+							"raw": "localhost:3000/api/orders",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"orders"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "755"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"2f3-9Nm2Jn12UGNcrxO/G3lcxu7C+x8\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Nov 2025 18:19:50 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"message\": \"User orders retrieved successfully\",\n    \"object\": [\n        {\n            \"id\": \"7ab080db-be57-46fc-9a89-9afbeb4efcc1\",\n            \"totalPrice\": \"77.47999999999999\",\n            \"status\": \"pending\",\n            \"createdAt\": \"2025-11-11T18:18:52.265Z\",\n            \"products\": [\n                {\n                    \"id\": \"263ef4f4-d577-40bd-8e30-5d167a4314f3\",\n                    \"name\": \"Wireless Mouse\",\n                    \"description\": \"Ergonomic wireless mouse with adjustable DPI\",\n                    \"price\": \"25.99\",\n                    \"stock\": 98,\n                    \"category\": \"Electronics\",\n                    \"image\": null,\n                    \"createdAt\": \"2025-11-11T18:09:00.243Z\",\n                    \"updatedAt\": \"2025-11-11T18:18:52.265Z\"\n                },\n                {\n                    \"id\": \"f3c71cf7-4710-4f6d-a746-279725cd8a9c\",\n                    \"name\": \"Product A\",\n                    \"description\": \"Some description  sfds sfg\",\n                    \"price\": \"25.5\",\n                    \"stock\": 9,\n                    \"category\": \"shoes\",\n                    \"image\": null,\n                    \"createdAt\": \"2025-11-11T18:08:05.219Z\",\n                    \"updatedAt\": \"2025-11-11T18:18:52.265Z\"\n                }\n            ]\n        }\n    ],\n    \"errors\": null\n}"
+				}
+			]
+		}
+	]
+}
