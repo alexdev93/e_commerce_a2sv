@@ -101,9 +101,9 @@ The server will start on `http://localhost:5000` (or the port you specified).
 
 ---
 
-#### Run with Docker 🐳
+## Run with Docker 🐳
 
-##### After cloning the repo:
+#### After cloning the repo:
 
 ```bash
 docker compose up --build -d
