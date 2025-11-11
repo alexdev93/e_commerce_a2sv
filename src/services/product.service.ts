@@ -12,16 +12,8 @@ export class ProductService {
     /**
      * Create a new product (Admin only)
      */
-    static async createProduct(user: { adminId: ObjectId, userRole: string }, data: CreateProductInput): Promise<ApiResponse> {
+    static async createProduct(adminId: string, data: CreateProductInput): Promise<ApiResponse> {
         try {
-            // 1. Verify Admin user
-            const admin = await userRepo.findOneBy({ id: new ObjectId(user.adminId) });
-            if (!admin) {
-                return { success: false, message: "Admin user not found", object: null, errors: ["Unauthorized"] };
-            }
-            if (admin.role !== user.userRole) {
-                return { success: false, message: "Access denied", object: null, errors: ["Forbidden"] };
-            }
 
             // 2. Create product
             const product = productRepo.create({
@@ -30,7 +22,7 @@ export class ProductService {
                 price: data.price,
                 stock: data.stock,
                 category: data.category,
-                userId: admin.id
+                userId: adminId
             });
 
             await productRepo.save(product);

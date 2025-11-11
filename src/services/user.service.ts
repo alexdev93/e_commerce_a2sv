@@ -33,7 +33,8 @@ export class UserService {
 
     const token = jwt.sign(
       {
-        id: user.id,
+        userId: user.id,
+        username: user.username,
         role: user.role,
       },
       JWT_SECRET,
@@ -70,7 +71,7 @@ export class UserService {
       username,
       email,
       password: hashedPassword,
-      role: "USER",
+      role: "ADMIN",
     });
 
     await userRepo.save(newUser);

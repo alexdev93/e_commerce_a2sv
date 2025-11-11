@@ -5,10 +5,13 @@ import { Product } from "../entities/product.entity";
 
 export const AppDataSource = new DataSource({
   type: "mongodb",
-  host: process.env.DB_HOST || "localhost",
+  host: "localhost",
   port: 27017,
-  database: process.env.DB_NAME || "a2sv_ecommerce",
-  synchronize: true, // ⚠️ set to false in production
-//   useUnifiedTopology: true,
+  username: "user",
+  password: "pass",
+  database: "a2sv_eccomerce",
+  authSource: "admin",
+  synchronize: true,
   entities: [User, Product],
+
 });

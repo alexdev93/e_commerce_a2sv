@@ -25,7 +25,7 @@ export class User {
 
   @Column({
     type: "string",
-    default: "USER",
+    default: "ADMIN",
   })
   role!: UserRole;
 

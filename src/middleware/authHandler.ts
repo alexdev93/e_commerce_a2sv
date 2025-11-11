@@ -32,12 +32,17 @@ export const verifyJwt = async (req: Request, res: Response, next: NextFunction)
         }
 
         const token = authHeader.split(" ")[1];
-        const secret = process.env.JWT_SECRET || "your_jwt_secret";
+        const secret = process.env.JWT_SECRET || "your_default_secret";
 
         const decoded = jwt.verify(token, secret) as JwtPayload;
 
+        console.log("decoded token: ", decoded);
+
+
         // Attach user info to request object
         req.user = decoded;
+
+        console.log("req.user: ", req.user);
         next();
     } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
