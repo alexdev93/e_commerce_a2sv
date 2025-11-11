@@ -92,7 +92,6 @@ export class UserService {
         username,
         email,
         password: hashedPassword,
-        role: "ADMIN", // or "USER" as needed
       });
 
       await userRepo.save(newUser);

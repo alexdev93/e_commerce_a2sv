@@ -84,8 +84,6 @@ CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 ```
-
-
 ---
 
 ## Running the Project
@@ -100,6 +98,16 @@ yarn start
 ```
 
 The server will start on `http://localhost:5000` (or the port you specified).
+
+---
+
+#### Run with Docker 🐳
+
+##### After cloning the repo:
+
+```bash
+docker compose up --build -d
+```
 
 ---
 
@@ -124,7 +132,7 @@ You can use this Postman collection to test all API endpoints of the A2SV E-comm
 ### Products
 - `POST /products` – Create a product (Admin only)
 - `PUT /products/:id` – Update a product (Admin only)
-- `GET /products` – List products (with optional pagination and search)
+- `GET /products?search="mobile"&page=1&pageSize=10` – List products (with optional pagination and search)
 - `GET /products/:id` – Get product details
 - `DELETE /products/:id` – Delete a product (Admin only)
 
