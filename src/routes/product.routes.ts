@@ -9,7 +9,6 @@ import {
 import { ApiResponse } from "../model/ApiResponse";
 import { ProductService } from "../services/product.service";
 import { authorizeRoles, verifyJwt } from "../middleware/authHandler";
-import { ObjectId } from "mongodb";
 import { PaginatedResponse } from "../model/PaginatedResponse";
 
 const productRoutes = express.Router();
@@ -22,7 +21,7 @@ productRoutes.post(
     "/",
     verifyJwt,
     authorizeRoles(["ADMIN"]),
-    catchAsync(async (req, res): Promise<void> => {
+    catchAsync(async (req, res) => {
         const apiResponse = new ApiResponse({ message: "" });
 
         const parseResult = createProductSchema.safeParse(req.body);
@@ -34,9 +33,7 @@ productRoutes.post(
             return;
         }
 
-        console.log("🟢 Controller (Create) User:", req.user);
         const adminId = req.user?.userId;
-
         if (!adminId) {
             apiResponse.success = false;
             apiResponse.message = "Unauthorized";
@@ -45,18 +42,9 @@ productRoutes.post(
             return;
         }
 
-        const result = await ProductService.createProduct(
-            adminId,
-            parseResult.data
-        );
+        const result = await ProductService.createProduct(adminId, parseResult.data);
 
-        apiResponse.success = result.success;
-        apiResponse.message = result.message;
-        apiResponse.object = result.object;
-        apiResponse.errors = result.errors;
-
-        res.status(apiResponse.success ? 201 : 400).json(apiResponse);
-        return;
+        res.status(result.success ? 201 : 400).json(result);
     })
 );
 
@@ -68,7 +56,7 @@ productRoutes.put(
     "/:id",
     verifyJwt,
     authorizeRoles(["ADMIN"]),
-    catchAsync(async (req, res): Promise<void> => {
+    catchAsync(async (req, res) => {
         const apiResponse = new ApiResponse({ message: "" });
 
         const parseResult = updateProductSchema.safeParse(req.body);
@@ -80,9 +68,7 @@ productRoutes.put(
             return;
         }
 
-        console.log("🟡 Controller (Update) User:", req.user);
-        const adminId = req.user?.userId || "";
-
+        const adminId = req.user?.userId;
         if (!adminId) {
             apiResponse.success = false;
             apiResponse.message = "Unauthorized";
@@ -91,26 +77,12 @@ productRoutes.put(
             return;
         }
 
-        const productId: ObjectId | string = req.params.id;
-        const result = await ProductService.updateProduct(
-            productId,
-            parseResult.data
-        );
-
-        apiResponse.success = result.success;
-        apiResponse.message = result.message;
-        apiResponse.object = result.object;
-        apiResponse.errors = result.errors;
+        const productId = req.params.id; // treat as string UUID
+        const result = await ProductService.updateProduct(productId, parseResult.data);
 
         res
-            .status(
-                result.success
-                    ? 200
-                    : result.message === "Product not found"
-                        ? 404
-                        : 400
-            )
-            .json(apiResponse);
+            .status(result.success ? 200 : result.message === "Product not found" ? 404 : 400)
+            .json(result);
     })
 );
 
@@ -120,12 +92,10 @@ productRoutes.put(
  */
 productRoutes.get(
     "/",
-    catchAsync(async (req, res): Promise<void> => {
-        const apiResponse = new PaginatedResponse({ message: "" });
-
-        // Validate query parameters
+    catchAsync(async (req, res) => {
         const parseResult = getProductsQuerySchema.safeParse(req.query);
         if (!parseResult.success) {
+            const apiResponse = new PaginatedResponse({ message: "" });
             apiResponse.success = false;
             apiResponse.message = "Invalid query parameters";
             apiResponse.errors = parseResult.error.issues.map((err) => err.message);
@@ -134,10 +104,7 @@ productRoutes.get(
         }
 
         const { page, pageSize, search } = parseResult.data as GetProductsInput;
-
-        // Fetch products with pagination
         const result = await ProductService.getProducts({ page, pageSize, search });
-
         res.status(result.success ? 200 : 400).json(result);
     })
 );
@@ -148,17 +115,16 @@ productRoutes.get(
  */
 productRoutes.get(
     "/:id",
-    catchAsync(async (req, res): Promise<void> => {
-        const { id } = req.params;
-        const result = await ProductService.getProductById(id);
+    catchAsync(async (req, res) => {
+        const productId = req.params.id; // string UUID
+        const result = await ProductService.getProductById(productId);
 
         if (!result.success) {
-            res.status(result.errors ? 404 : 400).json(result);
-            return
+            res.status(result.message === "Product not found" ? 404 : 400).json(result);
+            return;
         }
 
         res.status(200).json(result);
-        return;
     })
 );
 
@@ -170,11 +136,10 @@ productRoutes.delete(
     "/:id",
     verifyJwt,
     authorizeRoles(["ADMIN"]),
-    catchAsync(async (req, res): Promise<void> => {
-        const apiResponse = new ApiResponse({ message: "" });
-
+    catchAsync(async (req, res) => {
         const adminId = req.user?.userId;
         if (!adminId) {
+            const apiResponse = new ApiResponse({ message: "" });
             apiResponse.success = false;
             apiResponse.message = "Unauthorized";
             apiResponse.errors = ["Missing admin ID from token"];
@@ -182,9 +147,8 @@ productRoutes.delete(
             return;
         }
 
-        const productId: ObjectId | string = req.params.id;
+        const productId = req.params.id; // string UUID
         const result = await ProductService.deleteProduct(productId);
-
         res
             .status(result.success ? 200 : result.message === "Product not found" ? 404 : 400)
             .json(result);

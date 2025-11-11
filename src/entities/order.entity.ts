@@ -1,27 +1,40 @@
-import { Entity, ObjectIdColumn, ObjectId, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    ManyToOne,
+    ManyToMany,
+    JoinTable,
+    CreateDateColumn,
+    UpdateDateColumn,
+} from "typeorm";
+import { User } from "./user.entity";
+import { Product } from "./product.entity";
 
-@Entity()
+@Entity("orders")
 export class Order {
-    @ObjectIdColumn()
-    id!: ObjectId;
+    @PrimaryGeneratedColumn("uuid")
+    id!: string; // UUID instead of ObjectId
 
-    @Column()
-    userId!: ObjectId; // reference to the User who placed the order
+    @ManyToOne(() => User, (user) => user.orders)
+    user!: User;
 
-    @Column()
+    @Column({ nullable: true })
     description?: string;
 
-    @Column()
+    @Column("decimal")
     totalPrice!: number;
 
     @Column()
     status!: string; // e.g., "pending", "completed", "cancelled"
 
-    @Column()
-    products!: {
-        productId: ObjectId;
-        quantity: number;
-    }[];
+    @ManyToMany(() => Product)
+    @JoinTable({
+        name: "order_products", // join table name
+        joinColumn: { name: "orderId", referencedColumnName: "id" },
+        inverseJoinColumn: { name: "productId", referencedColumnName: "id" },
+    })
+    products!: Product[];
 
     @CreateDateColumn()
     createdAt!: Date;

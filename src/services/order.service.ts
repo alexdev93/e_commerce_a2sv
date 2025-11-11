@@ -1,90 +1,67 @@
-import { ObjectId } from "mongodb";
 import { AppDataSource } from "../config/data-source";
 import { ApiResponse } from "../model/ApiResponse";
 import { Order } from "../entities/order.entity";
 import { Product } from "../entities/product.entity";
 import { User } from "../entities/user.entity";
-import { AppError } from "../utils/AppError";
-
-const orderRepo = AppDataSource.getMongoRepository(Order);
-const productRepo = AppDataSource.getMongoRepository(Product);
-const userRepo = AppDataSource.getMongoRepository(User);
 
 export class OrderService {
     /**
      * Place a new order
      */
-    static async placeOrder(userId: string, orderItems: { productId: string; quantity: number }[]): Promise<ApiResponse> {
+    static async placeOrder(
+        userId: string,
+        orderItems: { productId: string; quantity: number }[]
+    ): Promise<ApiResponse> {
         const apiResponse = new ApiResponse({ message: "" });
 
         try {
-            // Validate user
-            const user = await userRepo.findOneBy({ _id: new ObjectId(userId) });
-            if (!user) {
-                apiResponse.success = false;
-                apiResponse.message = "User not found";
-                apiResponse.errors = ["Invalid user"];
-                return apiResponse;
-            }
+            const userRepo = AppDataSource.getRepository(User);
+            const productRepo = AppDataSource.getRepository(Product);
+            const orderRepo = AppDataSource.getRepository(Order);
 
-            // Validate and prepare products
-            let totalPrice = 0;
-            const orderedProducts: { productId: ObjectId; quantity: number }[] = [];
+            // Find user
+            const user = await userRepo.findOne({ where: { id: userId } });
+            if (!user) throw new Error("User not found");
 
-            // We'll use a session-like transaction (MongoDB-style)
-            const queryRunner = AppDataSource.createQueryRunner();
-            await queryRunner.connect();
-            await queryRunner.startTransaction();
+            // Start a transaction
+            await AppDataSource.transaction(async (manager) => {
+                let totalPrice = 0;
+                const products: Product[] = [];
 
-            try {
                 for (const item of orderItems) {
-                    const product = await productRepo.findOneBy({ _id: new ObjectId(item.productId) });
-                    if (!product) {
-                        throw new AppError(`Product not found with ID: ${item.productId}`);
-                    }
+                    const product = await manager.findOne(Product, {
+                        where: { id: item.productId },
+                    });
+                    if (!product) throw new Error(`Product not found: ${item.productId}`);
+                    if (product.stock < item.quantity)
+                        throw new Error(`Insufficient stock for ${product.name}`);
 
-                    if (product.stock < item.quantity) {
-                        throw new AppError(`Insufficient stock for product: ${product.name}`);
-                    }
-
-                    // Calculate total
                     totalPrice += product.price * item.quantity;
 
-                    // Deduct stock
+                    // Reduce stock
                     product.stock -= item.quantity;
-                    await queryRunner.manager.save(Product, product);
+                    await manager.save(product);
 
-                    orderedProducts.push({
-                        productId: new ObjectId(item.productId),
-                        quantity: item.quantity,
-                    });
+                    products.push(product);
                 }
 
-                // Create the order
-                const newOrder = orderRepo.create({
-                    userId: new ObjectId(userId),
-                    description: `Order with ${orderedProducts.length} items`,
+                // Create order
+                const newOrder = manager.create(Order, {
+                    user,
                     totalPrice,
                     status: "pending",
-                    products: orderedProducts,
+                    description: `Order with ${orderItems.length} items`,
+                    products, // ManyToMany relation
                 });
 
-                await queryRunner.manager.save(Order, newOrder);
-                await queryRunner.commitTransaction();
+                const savedOrder = await manager.save(newOrder);
 
                 apiResponse.success = true;
                 apiResponse.message = "Order placed successfully";
-                apiResponse.object = newOrder;
-                return apiResponse;
-            } catch (error: any) {
-                await queryRunner.rollbackTransaction();
-                apiResponse.success = false;
-                apiResponse.message = "Error placing order";
-                apiResponse.errors = [error.message];
-                return apiResponse;
-            } finally {
-                await queryRunner.release();
-            }
+                apiResponse.object = savedOrder;
+            });
+
+            return apiResponse;
         } catch (error: any) {
             apiResponse.success = false;
             apiResponse.message = "Failed to place order";
@@ -94,34 +71,31 @@ export class OrderService {
     }
 
     /**
-   * Get all orders for a specific user
-   * @param userId - ID of the authenticated user as string
-   */
+     * Get all orders for a specific user
+     */
     static async getUserOrders(userId: string): Promise<ApiResponse> {
         try {
-            const orderRepo = AppDataSource.getMongoRepository(Order);
-
-            // Convert string userId to MongoDB ObjectId
-            const userObjectId = new ObjectId(userId);
+            const orderRepo = AppDataSource.getRepository(Order);
 
             const orders = await orderRepo.find({
-                where: { userId: userObjectId },
+                where: { user: { id: userId } },
+                relations: ["products"], // include products if needed
                 order: { createdAt: "DESC" },
-                select: ["id", "status", "totalPrice", "createdAt"]
+                select: ["id", "status", "totalPrice", "createdAt"],
             });
 
             return {
                 success: true,
                 message: "User orders retrieved successfully",
                 object: orders,
-                errors: null
+                errors: null,
             };
         } catch (error: any) {
             return {
                 success: false,
                 message: "Failed to retrieve user orders",
                 object: null,
-                errors: [error.message]
+                errors: [error.message],
             };
         }
     }

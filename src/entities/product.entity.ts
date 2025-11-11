@@ -1,8 +1,8 @@
 import {
     Entity,
-    ObjectIdColumn,
-    ObjectId,
+    PrimaryGeneratedColumn,
     Column,
+    ManyToOne,
     CreateDateColumn,
     UpdateDateColumn,
 } from "typeorm";
@@ -10,8 +10,8 @@ import { User } from "./user.entity";
 
 @Entity("products")
 export class Product {
-    @ObjectIdColumn()
-    id!: ObjectId;
+    @PrimaryGeneratedColumn("uuid")
+    id!: string; // UUID instead of ObjectId
 
     @Column()
     name!: string;
@@ -19,7 +19,7 @@ export class Product {
     @Column()
     description!: string;
 
-    @Column("double")
+    @Column("decimal") // Use decimal for price in PostgreSQL
     price!: number;
 
     @Column("int")
@@ -28,6 +28,12 @@ export class Product {
     @Column()
     category!: string;
 
-    @Column()
-    userId!: ObjectId; 
+    @ManyToOne(() => User, (user) => user.products)
+    user!: User;
+
+    @CreateDateColumn()
+    createdAt!: Date;
+
+    @UpdateDateColumn()
+    updatedAt!: Date;
 }

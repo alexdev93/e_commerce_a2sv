@@ -1,10 +1,6 @@
-import dotenv from "dotenv";
 import app from "./app";
 import { AppDataSource } from "./config/data-source";
-// import connectDB from "./config/db";
-
-dotenv.config();
-// connectDB();
+import "dotenv/config";
 
 
 
