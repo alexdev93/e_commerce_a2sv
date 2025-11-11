@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { User } from "../entities/user.entity";
 import { Product } from "../entities/product.entity";
+import { Order } from "../entities/order.entity";
 
 export const AppDataSource = new DataSource({
   type: "mongodb",
@@ -12,6 +13,6 @@ export const AppDataSource = new DataSource({
   database: "a2sv_eccomerce",
   authSource: "admin",
   synchronize: true,
-  entities: [User, Product],
+  entities: [User, Product, Order],
 
 });
