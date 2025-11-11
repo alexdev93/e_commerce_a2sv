@@ -5,9 +5,13 @@ import { ApiResponse } from "../model/ApiResponse";
 import { CreateProductInput, UpdateProductInput, GetProductsInput } from "../validators/product.validator";
 import { PaginatedResponse } from "../model/PaginatedResponse";
 import cloudinary from "../config/cloudinary.config";
+import redis from "../config/redis";
 
 const productRepo = AppDataSource.getRepository(Product);
 const userRepo = AppDataSource.getRepository(User);
+
+// const CACHE_KEY = "products_all";
+const CACHE_TTL = Number(process.env.REDIS_TTL) || 3600;
 
 export class ProductService {
     /**
@@ -93,6 +97,21 @@ export class ProductService {
      */
     static async getProducts({ page, pageSize, search }: GetProductsInput): Promise<ApiResponse> {
         const apiResponse = new PaginatedResponse({ message: "" });
+        const CACHE_KEY = `products_page:${page}_size:${pageSize}_search:${search || ""}`;
+        const cached = await redis.get(CACHE_KEY);
+        if (cached) {
+            console.log("Cache hit");
+            apiResponse.success = true;
+            apiResponse.message = "Products retrieved successfully (from cache)";
+            apiResponse.object = {
+                products: JSON.parse(cached)
+            };
+            apiResponse.pageNumber = page;
+            apiResponse.pageSize = pageSize;
+            apiResponse.totalSize = JSON.parse(cached).length;
+            return apiResponse
+        }
+        console.log("Cache miss");
 
         try {
             const query = productRepo.createQueryBuilder("product");
@@ -115,14 +134,9 @@ export class ProductService {
             apiResponse.pageSize = pageSize;
             apiResponse.totalSize = totalProducts;
             apiResponse.object = {
-                products: products.map(p => ({
-                    id: p.id,
-                    name: p.name,
-                    price: p.price,
-                    stock: p.stock,
-                    category: p.category,
-                })),
+                products
             };
+            await redis.set(CACHE_KEY, JSON.stringify(products), "EX", CACHE_TTL);
 
             return apiResponse;
         } catch (err: any) {
