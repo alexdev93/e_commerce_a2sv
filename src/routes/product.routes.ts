@@ -1,21 +1,25 @@
 import express from "express";
 import { catchAsync } from "../utils/catchAsync";
-import { createProductSchema } from "../validators/product.validator";
+import { createProductSchema, updateProductSchema } from "../validators/product.validator";
 import { ApiResponse } from "../model/ApiResponse";
 import { ProductService } from "../services/product.service";
 import { authorizeRoles, verifyJwt } from "../middleware/authHandler";
+import { ObjectId } from "mongodb";
 
 const productRoutes = express.Router();
 
+/**
+ * @route POST /products
+ * @desc Create a new product (Admin only)
+ */
 productRoutes.post(
     "/",
     verifyJwt,
     authorizeRoles(["ADMIN"]),
     catchAsync(async (req, res): Promise<void> => {
-        const parseResult = createProductSchema.safeParse(req.body);
         const apiResponse = new ApiResponse({ message: "" });
 
-        // 1️⃣ Validate request body
+        const parseResult = createProductSchema.safeParse(req.body);
         if (!parseResult.success) {
             apiResponse.success = false;
             apiResponse.message = "Validation failed";
@@ -24,8 +28,9 @@ productRoutes.post(
             return;
         }
 
-        // 2️⃣ Get adminId from JWT payload
+        console.log("🟢 Controller (Create) User:", req.user);
         const adminId = req.user?.userId;
+
         if (!adminId) {
             apiResponse.success = false;
             apiResponse.message = "Unauthorized";
@@ -34,17 +39,60 @@ productRoutes.post(
             return;
         }
 
-        // 3️⃣ Create product
         const result = await ProductService.createProduct(adminId, parseResult.data);
 
-        // 4️⃣ Return standardized response
         apiResponse.success = result.success;
         apiResponse.message = result.message;
         apiResponse.object = result.object;
         apiResponse.errors = result.errors;
 
         res.status(apiResponse.success ? 201 : 400).json(apiResponse);
+        return;
     })
 );
+
+/**
+ * @route PUT /products/:id
+ * @desc Update existing product (Admin only)
+ */
+productRoutes.put(
+    "/:id",
+    verifyJwt,
+    authorizeRoles(["ADMIN"]),
+    catchAsync(async (req, res): Promise<void> => {
+        const apiResponse = new ApiResponse({ message: "" });
+
+        const parseResult = updateProductSchema.safeParse(req.body);
+        if (!parseResult.success) {
+            apiResponse.success = false;
+            apiResponse.message = "Validation failed";
+            apiResponse.errors = parseResult.error.issues.map((err) => err.message);
+            res.status(400).json(apiResponse);
+            return;
+        }
+
+        console.log("🟡 Controller (Update) User:", req.user);
+        const adminId = req.user?.userId || "";
+
+        if (!adminId) {
+            apiResponse.success = false;
+            apiResponse.message = "Unauthorized";
+            apiResponse.errors = ["Missing admin ID from token"];
+            res.status(401).json(apiResponse);
+            return;
+        }
+
+        const productId: ObjectId | string = req.params.id;
+        const result = await ProductService.updateProduct(productId, parseResult.data);
+
+        apiResponse.success = result.success;
+        apiResponse.message = result.message;
+        apiResponse.object = result.object;
+        apiResponse.errors = result.errors;
+
+        res.status(result.success ? 200 : result.message === "Product not found" ? 404 : 400).json(apiResponse);
+    })
+);
+
 
 export default productRoutes;

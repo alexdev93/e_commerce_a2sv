@@ -13,40 +13,63 @@ export class UserService {
    * Login user
    */
   static async loginUser(data: LoginInput, response: ApiResponse): Promise<void> {
-    const { email, password } = data;
+    try {
+      const { email, password } = data;
 
-    const user = await userRepo.findOne({ where: { email } });
-    if (!user) {
+      // 1️⃣ Check if user exists
+      const user = await userRepo.findOne({ where: { email } });
+      if (!user) {
+        response.success = false;
+        response.message = "Invalid credentials";
+        response.errors = ["Email not found"];
+        response.object = null;
+        return;
+      }
+
+      // 2️⃣ Validate password
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        response.success = false;
+        response.message = "Invalid credentials";
+        response.errors = ["Incorrect password"];
+        response.object = null;
+        return;
+      }
+
+      // 3️⃣ Generate JWT (consistent payload with verifyJwt)
+      const token = jwt.sign(
+        {
+          userId: user.id,
+          username: user.username,
+          role: user.role,
+        },
+        JWT_SECRET,
+        { expiresIn: "8h" }
+      );
+
+      // 4️⃣ Success response
+      response.success = true;
+      response.message = "Login successful";
+      response.object = {
+        token,
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+        },
+      };
+      response.errors = null;
+    } catch (err) {
+      // 5️⃣ Catch unexpected errors
+      const errorMessage = err instanceof Error ? err.message : String(err);
       response.success = false;
-      response.message = "Invalid Email";
+      response.message = "Internal server error";
+      response.errors = [errorMessage];
       response.object = null;
-      return;
     }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      response.success = false;
-      response.message = "Invalid Password";
-      response.object = null;
-      return;
-    }
-
-    const token = jwt.sign(
-      {
-        userId: user.id,
-        username: user.username,
-        role: user.role,
-      },
-      JWT_SECRET,
-      { expiresIn: "8h" }
-    );
-
-    response.success = true;
-    response.message = "Login successful";
-    response.object = {
-      token
-    };
   }
+
 
   /**
    * Register a new user

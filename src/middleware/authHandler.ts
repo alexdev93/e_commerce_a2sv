@@ -7,7 +7,7 @@ interface JwtPayload {
     role: string;
 }
 
-// Augment Express Request type to include `user`
+// Augment Express Request to include user info
 declare global {
     namespace Express {
         interface Request {
@@ -17,78 +17,87 @@ declare global {
 }
 
 /**
- * Middleware to verify JWT token
+ * Middleware: Verify JWT and attach user info to request
  */
 export const verifyJwt = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return res.json({
+            return res.status(401).json({
                 success: false,
                 message: "Missing or invalid token",
                 object: null,
-                errors: ["Unauthorized"]
+                errors: ["Unauthorized"],
             });
         }
 
         const token = authHeader.split(" ")[1];
         const secret = process.env.JWT_SECRET || "your_default_secret";
 
-        const decoded = jwt.verify(token, secret) as JwtPayload;
+        const decoded = jwt.verify(token, secret) as Partial<JwtPayload> & { id?: string };
 
-        console.log("decoded token: ", decoded);
+        // ✅ Normalize payload for consistency
+        req.user = {
+            userId: decoded.userId || decoded.id || "",
+            username: decoded.username || "",
+            role: decoded.role || "",
+        };
 
+        // Reject if missing critical data
+        if (!req.user.userId || !req.user.role) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid token payload",
+                object: null,
+                errors: ["Token missing required fields"],
+            });
+        }
 
-        // Attach user info to request object
-        req.user = decoded;
-
-        console.log("req.user: ", req.user);
         next();
     } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
-        return res.json({
+        return res.status(401).json({
             success: false,
-            message: "Invalid token",
+            message: "Invalid or expired token",
             object: null,
-            errors: [message]
+            errors: [message],
         });
     }
 };
 
 /**
- * Middleware factory to authorize by roles
- * @param roles array of roles allowed to access the route
+ * Middleware: Authorize based on roles
  */
 export const authorizeRoles = (roles: string[]) => {
-    return async (req: Request, res: Response, next: NextFunction) => {
+    return (req: Request, res: Response, next: NextFunction) => {
         try {
             if (!req.user) {
-                return res.json({
+                return res.status(401).json({
                     success: false,
                     message: "Unauthorized",
                     object: null,
-                    errors: ["No user info found"]
+                    errors: ["No user info found"],
                 });
             }
 
             if (!roles.includes(req.user.role)) {
-                return res.json({
+                return res.status(403).json({
                     success: false,
                     message: "Access forbidden",
                     object: null,
-                    errors: ["Forbidden"]
+                    errors: [`Role '${req.user.role}' is not allowed`],
                 });
             }
+
             next();
         } catch (err) {
             const message = err instanceof Error ? err.message : String(err);
-            return res.json({
+            return res.status(403).json({
                 success: false,
                 message: "Access forbidden",
                 object: null,
-                errors: [message]
+                errors: [message],
             });
         }
     };
 };
-
