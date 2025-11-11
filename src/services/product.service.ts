@@ -3,15 +3,12 @@ import { AppDataSource } from "../config/data-source";
 import { Product } from "../entities/product.entity";
 import { User } from "../entities/user.entity";
 import { ApiResponse } from "../model/ApiResponse";
-import { CreateProductInput, UpdateProductInput } from "../validators/product.validator";
+import { CreateProductInput, UpdateProductInput, GetProductsInput } from "../validators/product.validator";
 import { PaginatedResponse } from "../model/PaginatedResponse";
 
 const productRepo = AppDataSource.getMongoRepository(Product);
 // const userRepo = AppDataSource.getMongoRepository(User);
-interface GetProductsInput {
-    page: number;
-    pageSize: number;
-}
+
 
 export class ProductService {
     /**
@@ -95,18 +92,26 @@ export class ProductService {
     /**
    * Get paginated list of products (public)
    */
-    static async getProducts({ page, pageSize }: GetProductsInput): Promise<ApiResponse> {
+    static async getProducts({ page, pageSize, search }: GetProductsInput): Promise<ApiResponse> {
         const apiResponse = new PaginatedResponse({ message: "" });
 
         try {
-            // 1️⃣ Count total products
-            const totalProducts = await productRepo.count();
+            let whereClause = {};
+            if (search && search.trim() !== "") {
+                // Case-insensitive partial match on product name
+                const regex = new RegExp(search.trim(), "i"); // "i" for case-insensitive
+                whereClause = { name: { $regex: regex } };
+            }
+
+            // 1️⃣ Count total matching products
+            const totalProducts = await productRepo.count({ where: whereClause });
 
             // 2️⃣ Calculate total pages
             const totalPages = Math.ceil(totalProducts / pageSize);
 
-            // 3️⃣ Fetch products with pagination
+            // 3️⃣ Fetch products with pagination and search
             const products = await productRepo.find({
+                where: whereClause,
                 skip: (page - 1) * pageSize,
                 take: pageSize,
                 order: { name: "ASC" },

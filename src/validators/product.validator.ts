@@ -58,20 +58,20 @@ export const updateProductSchema = z.object({
 });
 
 export const getProductsQuerySchema = z.object({
-    page: z
-        .string() // Query params are received as strings
-        .optional()
-        .transform(val => (val ? parseInt(val) : 1)) // Default to 1 if not provided
-        .refine(val => val > 0, { message: "Page must be a positive number" }),
+    page: z.preprocess((val) => {
+        const parsed = Number(val);
+        return isNaN(parsed) || parsed <= 0 ? 1 : parsed;
+    }, z.number()),
 
-    pageSize: z
-        .string()
-        .optional()
-        .transform(val => (val ? parseInt(val) : 10)) // Default to 10 if not provided
-        .refine(val => val > 0 && val <= 100, { message: "Page size must be between 1 and 100" }),
+    pageSize: z.preprocess((val) => {
+        const parsed = Number(val);
+        return isNaN(parsed) || parsed <= 0 ? 10 : parsed;
+    }, z.number().max(100, { message: "Page size must be between 1 and 100" })),
+
+    search: z.string().optional(),
 });
 
-export type GetProductInput = z.infer<typeof getProductsQuerySchema>;
+export type GetProductsInput = z.infer<typeof getProductsQuerySchema>;
 
 export type UpdateProductInput = z.infer<typeof updateProductSchema>;
 

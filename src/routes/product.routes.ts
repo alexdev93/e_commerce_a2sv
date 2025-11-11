@@ -1,6 +1,6 @@
 import express from "express";
 import { catchAsync } from "../utils/catchAsync";
-import { createProductSchema, getProductsQuerySchema, updateProductSchema } from "../validators/product.validator";
+import { createProductSchema, GetProductsInput, getProductsQuerySchema, updateProductSchema } from "../validators/product.validator";
 import { ApiResponse } from "../model/ApiResponse";
 import { ProductService } from "../services/product.service";
 import { authorizeRoles, verifyJwt } from "../middleware/authHandler";
@@ -114,10 +114,10 @@ productRoutes.get(
             return;
         }
 
-        const { page, pageSize } = parseResult.data;
+        const { page, pageSize, search } = parseResult.data as GetProductsInput;
 
         // Fetch products with pagination
-        const result = await ProductService.getProducts({ page, pageSize });
+        const result = await ProductService.getProducts({ page, pageSize, search });
 
 
         res.status(result.success ? 200 : 400).json(result);
