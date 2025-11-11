@@ -11,6 +11,11 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d a2sv_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
       - a2sv-net
 
@@ -58,8 +63,10 @@ services:
       REDIS_DB: 0
       REDIS_TTL: 3600
     depends_on:
-      - postgres-a2sv
-      - redis-stack
+      postgres-a2sv:
+        condition: service_healthy
+      redis-stack:
+        condition: service_started
     networks:
       - a2sv-net
 
