@@ -6,10 +6,10 @@ import {
     getProductsQuerySchema,
     updateProductSchema,
 } from "../validators/product.validator";
-import { ApiResponse } from "../model/ApiResponse";
+import { ApiResponse } from "../dto/ApiResponse";
 import { ProductService } from "../services/product.service";
 import { authorizeRoles, verifyJwt } from "../middleware/authHandler";
-import { PaginatedResponse } from "../model/PaginatedResponse";
+import { PaginatedResponse } from "../dto/PaginatedResponse";
 import multer from "multer";
 
 const productRoutes = express.Router();

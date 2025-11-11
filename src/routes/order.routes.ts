@@ -1,7 +1,7 @@
 import express from "express";
 import { catchAsync } from "../utils/catchAsync";
 import { verifyJwt, authorizeRoles } from "../middleware/authHandler";
-import { ApiResponse } from "../model/ApiResponse";
+import { ApiResponse } from "../dto/ApiResponse";
 import { OrderService } from "../services/order.service";
 
 const orderRoutes = express.Router();

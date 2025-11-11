@@ -7,7 +7,7 @@ const redis = new Redis({
     db: Number(process.env.REDIS_DB) || 0,
 });
 
-redis.on("connect", () => console.log("Connected to Redis"));
-redis.on("error", (err:any) => console.error("Redis error:", err));
+redis.on("connect", () => console.log("✅ Connected to Redis"));
+redis.on("error", (err: any) => console.error("❌ Redis error:", err));
 
 export default redis;

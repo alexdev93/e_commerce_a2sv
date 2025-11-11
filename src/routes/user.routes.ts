@@ -1,13 +1,13 @@
 import express from "express";
 import { createUserSchema, loginSchema } from "../validators/user.validator";
 import { catchAsync } from "../utils/catchAsync";
-import { ApiResponse } from "../model/ApiResponse";
 import { UserService } from "../services/user.service";
+import { ApiResponse } from "../dto/ApiResponse";
 
 const userRoutes = express.Router();
 
 userRoutes.post(
-  "/auth/register",
+  "/register",
   catchAsync(async (req, res): Promise<void> => {
 
     const parseResult = createUserSchema.safeParse(req.body);
@@ -27,7 +27,7 @@ userRoutes.post(
 );
 
 userRoutes.post(
-  "/auth/login",
+  "/login",
   catchAsync(async (req, res): Promise<void> => {
 
     const parseResult = loginSchema.safeParse(req.body);

@@ -1,9 +1,9 @@
 import { AppDataSource } from "../config/data-source";
 import { Product } from "../entities/product.entity";
 import { User } from "../entities/user.entity";
-import { ApiResponse } from "../model/ApiResponse";
+import { ApiResponse } from "../dto/ApiResponse";
 import { CreateProductInput, UpdateProductInput, GetProductsInput } from "../validators/product.validator";
-import { PaginatedResponse } from "../model/PaginatedResponse";
+import { PaginatedResponse } from "../dto/PaginatedResponse";
 import cloudinary from "../config/cloudinary.config";
 import redis from "../config/redis";
 

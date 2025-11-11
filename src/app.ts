@@ -10,15 +10,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api", userRoutes);
-app.use("/api/products", productRoutes)
-app.use("/api/orders", orderRoutes)
+// const apiRouter = express.Router();
+
+app.use("/api/v1/auth", userRoutes);
+app.use("/api/v1/products", productRoutes)
+app.use("/api/v1/orders", orderRoutes)
+
+// app.use("/api/v1", apiRouter);
 
 app.get("/", (_req, res) => {
-  res.send("🚀 Node.js + TypeScript + Mongoose API running");
+  res.send("🚀 Node.js + TypeScript + Postgres API running");
 });
-
-// app.use("/api/users", userRoutes);
 
 app.use(errorHandler);
 

@@ -1,5 +1,5 @@
 import { AppDataSource } from "../config/data-source";
-import { ApiResponse } from "../model/ApiResponse";
+import { ApiResponse } from "../dto/ApiResponse";
 import { Order } from "../entities/order.entity";
 import { Product } from "../entities/product.entity";
 import { User } from "../entities/user.entity";
