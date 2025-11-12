@@ -6,6 +6,7 @@ import { CreateProductInput, UpdateProductInput, GetProductsInput } from "../val
 import { PaginatedResponse } from "../dto/PaginatedResponse";
 import cloudinary from "../config/cloudinary.config";
 import redis from "../config/redis";
+import { instanceToPlain } from "class-transformer";
 
 const productRepo = AppDataSource.getRepository(Product);
 const userRepo = AppDataSource.getRepository(User);
@@ -52,7 +53,7 @@ export class ProductService {
 
             apiResponse.success = true;
             apiResponse.message = "Product created successfully";
-            apiResponse.object = product;
+            apiResponse.object = instanceToPlain(product);
             return apiResponse;
         } catch (err: any) {
             apiResponse.success = false;

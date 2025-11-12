@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { Product } from "./product.entity";
 import { Order } from "./order.entity";
+import { Exclude } from "class-transformer";
 
 export type UserRole = "USER" | "ADMIN";
 
@@ -22,6 +23,7 @@ export class User {
   @Column({ unique: true })
   email!: string;
 
+  @Exclude()
   @Column()
   password!: string;
 

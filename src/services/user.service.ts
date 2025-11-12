@@ -52,12 +52,8 @@ export class UserService {
       response.message = "Login successful";
       response.object = {
         token,
-        user: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          role: user.role,
-        },
+        username: user.username,
+
       };
       response.errors = null;
     } catch (err: any) {
